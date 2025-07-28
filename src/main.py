@@ -174,22 +174,6 @@ async def create_ghl_server():
     
     # Define custom route mappings for better organization
     route_maps = [
-        # Convert all GET endpoints with path parameters to resource templates
-        # RouteMap(
-        #     methods=["GET"],
-        #     pattern=r".*\{.*\}.*",
-        #     mcp_type=MCPType.RESOURCE_TEMPLATE,
-        #     mcp_tags={"ghl", "resource-template"}
-        # ),
-        
-        # Convert all other GET endpoints to resources
-        # RouteMap(
-        #     methods=["GET"],
-        #     pattern=r".*",
-        #     mcp_type=MCPType.RESOURCE,
-        #     mcp_tags={"ghl", "resource"}
-        # ),
-        
         # Convert all non-GET endpoints to tools
         RouteMap(
             methods=["POST", "PUT", "PATCH", "DELETE"],
@@ -231,25 +215,32 @@ async def create_ghl_server():
     return mcp
 
 
-async def main():
+def main():
     """Main entry point for the MCP server."""
     try:
-        server = await create_ghl_server()
         print("Starting GoHighLevel MCP Server...")
         print("Environment variables:")
         print(f"  GHL_API_KEY: {'Set' if os.getenv('GHL_API_KEY') else 'Not set'}")
         print(f"  GHL_BASE_URL: {os.getenv('GHL_BASE_URL', 'https://services.leadconnectorhq.com')}")
-        print("\nServer is ready to accept connections.")
+        print()
         
-        # Run the server
-        await server.run()
+        # Create the server asynchronously
+        server = asyncio.run(create_ghl_server())
+        
+        print("Server is ready to accept connections.")
+        print("Starting MCP server...")
+        
+        # Run the server - this should be called synchronously and will handle its own event loop
+        server.run()
         
     except KeyboardInterrupt:
         print("\nShutting down server...")
     except Exception as e:
         print(f"Error starting server: {e}")
+        import traceback
+        traceback.print_exc()
         raise
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()

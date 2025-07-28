@@ -83,15 +83,14 @@ FASTMCP_EXPERIMENTAL_ENABLE_NEW_OPENAPI_PARSER=true
 ```
 ghl-mcp-app/
 ├── src/
-│   ├── main.py              # Main MCP server implementation
-│   └── mcp_tools/           # Legacy generated tools (not used with FastMCP)
+│   └── main.py              # Main MCP server implementation
 ├── docs/                    # GoHighLevel API documentation
 │   ├── contacts/
 │   ├── campaigns/
 │   ├── opportunities/
 │   └── ... (32 API modules)
 ├── scripts/
-│   └── generate_tools.py    # Legacy tool generation script
+│   └── generate_tools.py    # Legacy tool generation script (reference only)
 ├── test_server.py           # Server validation script
 ├── .env.example             # Environment configuration template
 └── README.md               # This file

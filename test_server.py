@@ -7,11 +7,11 @@ import asyncio
 from src.main import create_ghl_server
 
 
-async def test_server_creation():
+def test_server_creation():
     """Test that the server can be created and tools are generated."""
     try:
         print("Creating GoHighLevel MCP server...")
-        server = await create_ghl_server()
+        server = asyncio.run(create_ghl_server())
         
         print(f"\n✅ Server created successfully!")
         print(f"📊 Server type: {type(server)}")
@@ -27,9 +27,11 @@ async def test_server_creation():
         
     except Exception as e:
         print(f"❌ Error creating server: {e}")
+        import traceback
+        traceback.print_exc()
         return False
 
 
 if __name__ == "__main__":
-    success = asyncio.run(test_server_creation())
+    success = test_server_creation()
     exit(0 if success else 1)
