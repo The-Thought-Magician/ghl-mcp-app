@@ -76,6 +76,100 @@ FASTMCP_EXPERIMENTAL_ENABLE_NEW_OPENAPI_PARSER=true
 3. Create a new private application
 4. Copy the API key to your `.env` file
 
+### Additional Configuration
+
+For production use, also configure:
+
+```bash
+# Required for many GoHighLevel endpoints
+GHL_LOCATION_ID=your-location-id-here
+
+# Transport configuration (for LibreChat integration)
+MCP_TRANSPORT=stdio          # Options: stdio, http, sse
+MCP_HOST=127.0.0.1          # For HTTP/SSE transport
+MCP_PORT=8000               # For HTTP/SSE transport
+```
+
+## 🚦 Transport Options
+
+The server supports multiple transport protocols:
+
+### 1. STDIO Transport (Default)
+Best for direct MCP client integration and development:
+
+```bash
+# Default - STDIO transport
+python src/main.py
+
+# Or explicitly set
+MCP_TRANSPORT=stdio python src/main.py
+```
+
+### 2. Streamable HTTP Transport (Recommended for LibreChat)
+Best for production LibreChat integration:
+
+```bash
+# Set transport to HTTP
+export MCP_TRANSPORT=http
+export MCP_HOST=127.0.0.1
+export MCP_PORT=8000
+
+python src/main.py
+```
+
+The server will be available at: `http://127.0.0.1:8000/mcp`
+
+### 3. SSE Transport (Legacy)
+Server-Sent Events transport (deprecated but supported):
+
+```bash
+export MCP_TRANSPORT=sse
+python src/main.py
+```
+
+## 🤖 LibreChat Integration
+
+### Quick Setup
+
+1. **Start the server with HTTP transport:**
+   ```bash
+   MCP_TRANSPORT=http python src/main.py
+   ```
+
+2. **Copy the example configuration:**
+   ```bash
+   cp librechat.example.yaml /path/to/librechat/librechat.yaml
+   ```
+
+3. **Configure your API credentials:**
+   Edit the copied `librechat.yaml` and update:
+   - `GHL_API_KEY`: Your GoHighLevel API key
+   - `GHL_LOCATION_ID`: Your GoHighLevel location ID
+   - Server URL if different from `http://127.0.0.1:8000/mcp`
+
+4. **Restart LibreChat** to load the new configuration.
+
+### Configuration Details
+
+The `librechat.example.yaml` file includes:
+- Complete MCP server configuration for GoHighLevel
+- Tool access controls (whitelist/blacklist)
+- Model specifications and presets
+- Timeout and retry settings
+- Interface customization options
+
+### Testing HTTP Transport
+
+Use the provided test script to verify HTTP transport:
+
+```bash
+# Make sure server is running with HTTP transport
+MCP_TRANSPORT=http python src/main.py &
+
+# In another terminal, test the server
+python test_http_server.py
+```
+
 ## 🏗️ Architecture
 
 ### Project Structure

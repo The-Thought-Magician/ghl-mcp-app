@@ -133,16 +133,19 @@ async def create_ghl_server():
     """Create the GoHighLevel MCP server."""
     
     # Get configuration from environment variables
-    api_key = os.getenv("GHL_API_KEY")
+    api_key = os.getenv("GHL_API_KEY", "placeholder-key")
+    location_id = os.getenv("GHL_LOCATION_ID", "placeholder-location")
     base_url = os.getenv("GHL_BASE_URL", "https://services.leadconnectorhq.com")
     
-    if not api_key:
-        print("Warning: GHL_API_KEY environment variable not set. Server will run with placeholder authentication.")
-        api_key = "your-api-key-here"
+    # Note: In production, API credentials should come from LibreChat
+    # The MCP server will receive them through the MCP protocol
     
-    # Set up the HTTP client with authentication
+    # Set up the HTTP client with placeholder authentication
+    # Real credentials will be provided by LibreChat at runtime
     headers = {
         "Authorization": f"Bearer {api_key}",
+        "X-API-KEY": api_key,  # GoHighLevel also uses this header
+        "locationid": location_id,  # Required for many GHL endpoints
         "Version": "2021-07-28",  # GoHighLevel API version
         "Content-Type": "application/json"
     }
@@ -219,19 +222,27 @@ def main():
     """Main entry point for the MCP server."""
     try:
         print("Starting GoHighLevel MCP Server...")
-        print("Environment variables:")
-        print(f"  GHL_API_KEY: {'Set' if os.getenv('GHL_API_KEY') else 'Not set'}")
-        print(f"  GHL_BASE_URL: {os.getenv('GHL_BASE_URL', 'https://services.leadconnectorhq.com')}")
+        print("Transport: STDIO (default)")
         print()
         
         # Create the server asynchronously
         server = asyncio.run(create_ghl_server())
         
-        print("Server is ready to accept connections.")
-        print("Starting MCP server...")
+        print("Server is ready for MCP integration!")
         
-        # Run the server - this should be called synchronously and will handle its own event loop
-        server.run()
+        # Get transport configuration
+        transport = os.getenv("MCP_TRANSPORT", "stdio")
+        host = os.getenv("MCP_HOST", "127.0.0.1")
+        port = int(os.getenv("MCP_PORT", "8000"))
+        
+        if transport.lower() == "http":
+            print(f"Starting MCP server with HTTP transport on {host}:{port}")
+            print(f"Server URL: http://{host}:{port}/mcp")
+            server.run(transport="http", host=host, port=port)
+        else:
+            print("Starting MCP server with STDIO transport...")
+            print("Use this server with MCP-compatible clients")
+            server.run()
         
     except KeyboardInterrupt:
         print("\nShutting down server...")

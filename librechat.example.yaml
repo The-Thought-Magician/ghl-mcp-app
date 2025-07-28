@@ -1,0 +1,31 @@
+# LibreChat Configuration for GoHighLevel MCP Server
+# Copy this to your LibreChat installation as librechat.yaml
+
+version: 1.1.5
+
+# MCP Server Configuration
+mcpServers:
+  gohighlevel:
+    name: "GoHighLevel CRM"
+    description: "Access GoHighLevel CRM, marketing automation, and business tools"
+    
+    # STDIO transport configuration
+    command: "python"
+    args: ["/path/to/ghl-mcp-app/src/main.py"]
+    
+    # Configure your GoHighLevel API credentials here
+    env:
+      GHL_API_KEY: "your-ghl-api-key-here"
+      GHL_LOCATION_ID: "your-ghl-location-id-here"
+      GHL_BASE_URL: "https://services.leadconnectorhq.com"
+    
+    tools:
+      enabled: true
+      # Optional: Restrict to specific tools
+      # whitelist:
+      #   - "get_contacts"
+      #   - "create_contact"
+
+# Optional: Interface customization  
+interface:
+  showMcpTools: true
