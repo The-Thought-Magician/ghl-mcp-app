@@ -1,0 +1,107 @@
+name: "🌟 Feature Request: New APIs"
+description: Suggest a new feature or documentation improvement
+title: "[Feature New API] "
+labels: ["feature-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Thank you for suggesting a new API feature!
+        
+        Please fill out the information below to help us understand your feature request.
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: 🌟 Describe the Feature
+      description: A clear and concise description of the proposed improvement.
+      placeholder: I would like to see an API endpoint that can...
+    validations:
+      required: true
+
+  - type: textarea
+    id: justification
+    attributes:
+      label: 🚀 Justification
+      description: Why would this be useful for other developers?
+      placeholder: This would help developers by...
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestions
+    attributes:
+      label: 📝 Suggestions
+      description: If applicable, include ideas or mockups of the improvement.
+      placeholder: |
+        ```json
+        {
+          "suggested_endpoint": "/api/v2/new-feature",
+          "method": "POST",
+          "response": "..."
+        }
+        ```
+    validations:
+      required: false
+      
+  - type: dropdown
+    id: product-area
+    attributes:
+      label: Product Area
+      description: Which product area would this new API relate to?
+      options:
+        - ad-publishing
+        - blogs
+        - bulk-actions
+        - calendars
+        - certificates
+        - client-portal
+        - communities
+        - contacts
+        - conversations
+        - conversations-ai
+        - custom-objects
+        - emails
+        - forms
+        - funnels
+        - gokollab
+        - integrations
+        - launchpad
+        - lc-email
+        - lc-phone
+        - lc-phone-sms
+        - lc-phone-voice
+        - lc-whatsapp
+        - marketplace
+        - marketplace-modules
+        - membership
+        - onboarding
+        - opportunities
+        - payment-products
+        - payments
+        - proposals
+        - prospecting
+        - reporting
+        - reputation
+        - reselling
+        - saas
+        - snapshots
+        - social-planner
+        - surveys
+        - templates
+        - text
+        - voice
+        - wordpress
+        - workflows
+        - yext
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: 🧠 Additional Context
+      description: Any other details you'd like to share?
+      placeholder: This feature would integrate well with...
+    validations:
+      required: false 

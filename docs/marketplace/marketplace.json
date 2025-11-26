@@ -1,0 +1,709 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/marketplace/billing/charges": {
+      "post": {
+        "operationId": "charge",
+        "summary": "Create a new wallet charge",
+        "description": "<div>\n    <p>Create a new wallet charge</p> \n    <div>\n      <span style= \"display: inline-block;\n                  width: 25px; height: 25px;\n                  background-color: yellow;\n                  color: black;\n                  font-weight: bold;\n                  font-size: 24px;\n                  text-align: center;\n                  line-height: 22px;\n                  border: 2px solid black;\n                  border-radius: 10%;\n                  margin-right: 10px;\">\n                  !\n        </span>\n        <span>\n          <strong>\n            This feature is currently in Private Beta and not available to all developers.\n          </strong>\n        </span>\n    </div>\n  </div>",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer 9c48df2694a849b6089f9d0d3513efe"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RaiseChargeBodyDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Charge created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "chargeId": {
+                      "type": "string",
+                      "example": "charge_123"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "statusCode": {
+                      "type": "number",
+                      "example": 400
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableDTO"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Wallet Charges"
+        ],
+        "security": [
+          {
+            "Location-Access-Only": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "getCharges",
+        "summary": "Get all wallet charges",
+        "description": "<div>\n    <p>Get all wallet charges</p> \n    <div>\n      <span style= \"display: inline-block;\n                  width: 25px; height: 25px;\n                  background-color: yellow;\n                  color: black;\n                  font-weight: bold;\n                  font-size: 24px;\n                  text-align: center;\n                  line-height: 22px;\n                  border: 2px solid black;\n                  border-radius: 10%;\n                  margin-right: 10px;\">\n                  !\n        </span>\n        <span>\n          <strong>\n            This feature is currently in Private Beta and not available to all developers.\n          </strong>\n        </span>\n    </div>\n  </div>",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer 9c48df2694a849b6089f9d0d3513efe"
+            }
+          },
+          {
+            "name": "meterId",
+            "required": false,
+            "in": "query",
+            "description": "Billing Meter ID (you can find this on your app's pricing page on the developer portal)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "eventId",
+            "required": false,
+            "in": "query",
+            "description": "Event ID / Transaction ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "required": false,
+            "in": "query",
+            "description": "Filter results by User ID that your server passed via API when the charge was created",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "Filter results AFTER a specific date. Use this in combination with endDate to filter results in a specific time window.",
+            "schema": {
+              "example": "2025-03-26",
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "Filter results BEFORE a specific date. Use this in combination with startDate to filter results in a specific time window.",
+            "schema": {
+              "example": "2025-03-26",
+              "type": "string"
+            }
+          },
+          {
+            "name": "skip",
+            "required": false,
+            "in": "query",
+            "description": "Number of records to skip",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Maximum number of records to return",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns list of wallet charges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "charges": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "refunded": {
+                            "type": "boolean",
+                            "description": "Value is 'true' if the charge has subsequently been refunded."
+                          },
+                          "currency": {
+                            "type": "string",
+                            "description": "Currency of the transaction. We currently support USD only."
+                          },
+                          "appId": {
+                            "type": "string",
+                            "description": "App ID"
+                          },
+                          "meterId": {
+                            "type": "string",
+                            "description": "Billing Meter ID (you can find this on your app's pricing page)"
+                          },
+                          "chargeId": {
+                            "type": "string",
+                            "description": "Charge ID"
+                          },
+                          "entityType": {
+                            "type": "string",
+                            "description": "Indicates who was charged? Currently, we support charges for 'location' only"
+                          },
+                          "entityId": {
+                            "type": "string",
+                            "description": "If the entityType is Location, entityld would be locationld."
+                          },
+                          "amountCharged": {
+                            "type": "number",
+                            "description": "Total amount charged"
+                          },
+                          "pricePerUnit": {
+                            "type": "number",
+                            "description": "Price per unit for the charge"
+                          },
+                          "transactionType": {
+                            "type": "string",
+                            "description": "This can be one of two values - 'charge' or 'refund'"
+                          },
+                          "units": {
+                            "type": "number",
+                            "description": "Number of units that the sub-account was charged for"
+                          },
+                          "meta": {
+                            "type": "object",
+                            "description": "meta object contains details that were sent while creating the charge via the API - eventID, description, eventTime, userld"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the charge was created in our system"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Timestamp when the charge was last updated in our system"
+                          }
+                        }
+                      }
+                    },
+                    "total": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableDTO"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Wallet Charges"
+        ],
+        "security": [
+          {
+            "Location-Access-Only": []
+          }
+        ]
+      }
+    },
+    "/marketplace/billing/charges/{chargeId}": {
+      "delete": {
+        "operationId": "deleteCharge",
+        "summary": "Delete a wallet charge",
+        "description": "<div>\n    <p>Delete a wallet charge</p> \n    <div>\n      <span style= \"display: inline-block;\n                  width: 25px; height: 25px;\n                  background-color: yellow;\n                  color: black;\n                  font-weight: bold;\n                  font-size: 24px;\n                  text-align: center;\n                  line-height: 22px;\n                  border: 2px solid black;\n                  border-radius: 10%;\n                  margin-right: 10px;\">\n                  !\n        </span>\n        <span>\n          <strong>\n            This feature is currently in Private Beta and not available to all developers.\n          </strong>\n        </span>\n    </div>\n  </div>",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer 9c48df2694a849b6089f9d0d3513efe"
+            }
+          },
+          {
+            "name": "chargeId",
+            "required": true,
+            "in": "path",
+            "description": "ID of the charge to delete",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Charge deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Charge not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Charge not found"
+                    },
+                    "statusCode": {
+                      "type": "number",
+                      "example": 404
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableDTO"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Wallet Charges"
+        ],
+        "security": [
+          {
+            "Location-Access-Only": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "getSpecificCharge",
+        "summary": "Get specific wallet charge details",
+        "description": "<div>\n    <p>Get specific wallet charge details</p> \n    <div>\n      <span style= \"display: inline-block;\n                  width: 25px; height: 25px;\n                  background-color: yellow;\n                  color: black;\n                  font-weight: bold;\n                  font-size: 24px;\n                  text-align: center;\n                  line-height: 22px;\n                  border: 2px solid black;\n                  border-radius: 10%;\n                  margin-right: 10px;\">\n                  !\n        </span>\n        <span>\n          <strong>\n            This feature is currently in Private Beta and not available to all developers.\n          </strong>\n        </span>\n    </div>\n  </div>",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer 9c48df2694a849b6089f9d0d3513efe"
+            }
+          },
+          {
+            "name": "chargeId",
+            "required": true,
+            "in": "path",
+            "description": "ID of the charge to retrieve",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns charge details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "refunded": {
+                      "type": "boolean",
+                      "description": "Value is 'true' if the charge has subsequently been refunded."
+                    },
+                    "currency": {
+                      "type": "string",
+                      "description": "Currency of the transaction. We currently support USD only."
+                    },
+                    "appId": {
+                      "type": "string",
+                      "description": "App ID"
+                    },
+                    "meterId": {
+                      "type": "string",
+                      "description": "Billing Meter ID (you can find this on your app's pricing page)"
+                    },
+                    "chargeId": {
+                      "type": "string",
+                      "description": "Charge ID"
+                    },
+                    "entityType": {
+                      "type": "string",
+                      "description": "Indicates who was charged? Currently, we support charges for 'location' only"
+                    },
+                    "entityId": {
+                      "type": "string",
+                      "description": "If the entityType is Location, entityld would be locationld."
+                    },
+                    "amountCharged": {
+                      "type": "number",
+                      "description": "Total amount charged"
+                    },
+                    "pricePerUnit": {
+                      "type": "number",
+                      "description": "Price per unit for the charge"
+                    },
+                    "transactionType": {
+                      "type": "string",
+                      "description": "This can be one of two values - 'charge' or 'refund'"
+                    },
+                    "units": {
+                      "type": "number",
+                      "description": "Number of units that the sub-account was charged for"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "description": "meta object contains details that were sent while creating the charge via the API - eventID, description, eventTime, userld"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Timestamp when the charge was created in our system"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Timestamp when the charge was last updated in our system"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Charge not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Charge not found"
+                    },
+                    "statusCode": {
+                      "type": "number",
+                      "example": 404
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableDTO"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Wallet Charges"
+        ],
+        "security": [
+          {
+            "Location-Access-Only": []
+          }
+        ]
+      }
+    },
+    "/marketplace/billing/charges/has-funds": {
+      "get": {
+        "operationId": "hasFunds",
+        "summary": "Check if account has sufficient funds",
+        "description": "<div>\n    <p>Check if account has sufficient funds</p> \n    <div>\n      <span style= \"display: inline-block;\n                  width: 25px; height: 25px;\n                  background-color: yellow;\n                  color: black;\n                  font-weight: bold;\n                  font-size: 24px;\n                  text-align: center;\n                  line-height: 22px;\n                  border: 2px solid black;\n                  border-radius: 10%;\n                  margin-right: 10px;\">\n                  !\n        </span>\n        <span>\n          <strong>\n            This feature is currently in Private Beta and not available to all developers.\n          </strong>\n        </span>\n    </div>\n  </div>",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Access Token",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer 9c48df2694a849b6089f9d0d3513efe"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns fund availability status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "hasFunds": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableDTO"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Wallet Charges"
+        ],
+        "security": [
+          {
+            "Location-Access-Only": []
+          }
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Developer marketplace API",
+    "description": "Documentation for Marketplace API",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [
+    {
+      "name": "Marketplace",
+      "description": "Documentation for Marketplace API"
+    }
+  ],
+  "servers": [
+    {
+      "url": "https://services.leadconnectorhq.com"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "name": "Authorization",
+        "in": "header",
+        "description": "Use the Access Token generated with user type as Sub-Account (OR) Private Integration Token of Sub-Account.",
+        "type": "http"
+      },
+      "Location-Access": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "name": "Authorization",
+        "in": "header",
+        "description": "Use the Access Token generated with user type as Sub-Account (OR) Private Integration Token of Sub-Account.",
+        "type": "http"
+      },
+      "Location-Access-Only": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "name": "Authorization",
+        "in": "header",
+        "description": "Use the Access Token generated with user type as Sub-Account.",
+        "type": "http"
+      },
+      "Agency-Access": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "name": "Authorization",
+        "in": "header",
+        "description": "Use the Access Token generated with user type as Agency (OR) Private Integration Token of Agency.",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "BadRequestDTO": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "example": "Bad Request"
+          }
+        }
+      },
+      "UnauthorizedDTO": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "example": 401
+          },
+          "message": {
+            "type": "string",
+            "example": "Invalid token: access token is invalid"
+          },
+          "error": {
+            "type": "string",
+            "example": "Unauthorized"
+          }
+        }
+      },
+      "UnprocessableDTO": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "example": 422
+          },
+          "message": {
+            "example": [
+              "Unprocessable Entity"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "string",
+            "example": "Unprocessable Entity"
+          }
+        }
+      },
+      "RaiseChargeBodyDTO": {
+        "type": "object",
+        "properties": {
+          "appId": {
+            "type": "string",
+            "description": "App ID of the App"
+          },
+          "meterId": {
+            "type": "string",
+            "description": "Billing Meter ID (you can find this on your app's pricing page)"
+          },
+          "eventId": {
+            "type": "string",
+            "description": "Event ID / Transaction ID on your server's side. This will help you maintain the reference of the event/transaction on your end that you charged the customer for."
+          },
+          "userId": {
+            "type": "string",
+            "description": "User ID"
+          },
+          "locationId": {
+            "type": "string",
+            "description": "ID of the Sub-Account to be charged"
+          },
+          "companyId": {
+            "type": "string",
+            "description": "ID of the Agency the Sub-account belongs to"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the charge"
+          },
+          "units": {
+            "type": "string",
+            "description": "Number of units to charge"
+          },
+          "eventTime": {
+            "type": "string",
+            "description": "The timestamp when the event/transaction was performed. If blank, the billing timestamp will be set as the event time. ISO8601 Format.",
+            "example": "2025-03-26T00:00:000Z"
+          }
+        },
+        "required": [
+          "appId",
+          "meterId",
+          "eventId",
+          "locationId",
+          "companyId",
+          "description",
+          "units"
+        ]
+      }
+    }
+  }
+}
