@@ -19,6 +19,28 @@ A Model Context Protocol (MCP) server that provides access to the complete GoHig
 
 ## 🚀 Quick Start
 
+### One-Command Setup (Recommended)
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd ghl-mcp-app
+
+# Run the complete setup and start script
+./start.sh
+```
+
+This script will:
+1. 📚 Clone/update GoHighLevel API documentation
+2. 🐍 Create Python virtual environment
+3. 📦 Install all dependencies
+4. ⚙️ Create configuration files
+5. 🎯 Start the MCP server
+
+### Manual Setup (Alternative)
+
+If you prefer manual setup:
+
 ### 1. Clone and Setup
 
 ```bash
@@ -39,20 +61,79 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 uv pip install fastmcp aiohttp pydantic python-dotenv
 ```
 
-### 4. Configure Environment
+### 4. Clone API Documentation
+
+```bash
+git clone https://github.com/GoHighLevel/highlevel-api-docs.git docs
+```
+
+### 5. Configure Environment
 
 ```bash
 cp .env.example .env
 # Edit .env and add your GoHighLevel API key
 ```
 
-### 5. Run the Server
+### 6. Run the Server
 
-```bash
 python src/main.py
 ```
 
-## ⚙️ Configuration
+## 🤖 Claude Desktop Integration
+
+### Quick Setup
+
+1. **Run the setup script:**
+   ```bash
+   ./start.sh
+   ```
+   This will show you the exact configuration to add to Claude Desktop.
+
+2. **Add to Claude Desktop config:**
+   - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+   - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+   ```json
+   {
+     "mcpServers": {
+       "gohighlevel": {
+         "command": "python",
+         "args": ["/full/path/to/ghl-mcp-app/src/main.py"],
+         "env": {
+           "GHL_API_KEY": "your-actual-api-key",
+           "GHL_LOCATION_ID": "your-actual-location-id"
+         }
+       }
+     }
+   }
+   ```
+
+3. **Restart Claude Desktop** to load the MCP server.
+
+4. **Verify integration:** Look for the hammer icon 🔨 in Claude Desktop to see your 327 GoHighLevel tools!
+
+## ☁️ Render.com Deployment
+
+### One-Click Deploy
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/your-username/ghl-mcp-app)
+
+### Manual Deployment
+
+1. **Fork this repository** to your GitHub account
+2. **Create a Web Service** on Render.com connected to your fork
+3. **Set environment variables** in Render dashboard:
+   ```
+   GHL_API_KEY=your-gohighlevel-api-key
+   GHL_LOCATION_ID=your-location-id
+   ```
+4. **Deploy** - Render handles the rest automatically!
+
+Your deployed server will be available at: `https://your-service-name.onrender.com`
+
+📚 **[Complete Deployment Guide](RENDER_DEPLOYMENT.md)** - Detailed instructions and troubleshooting
+
+## 🤖 LibreChat Integration
 
 ### Environment Variables
 
